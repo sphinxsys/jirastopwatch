@@ -59,7 +59,8 @@ namespace StopWatch
         public WorklogCommentSetting PostWorklogComment { get; set; }
 
         public string Username { get; set; }
-        public string Password { get; set; }
+        public string PrivateApiToken { get; set; }
+
         public bool FirstRun { get; set; }
 
         public int CurrentFilter { get; set; }
@@ -71,6 +72,8 @@ namespace StopWatch
         public bool LoggingEnabled { get; set; }
 
         public bool CheckForUpdate { get; set; }
+
+        public string JiraAvatarUrl { get; set; }
         #endregion
 
 
@@ -119,10 +122,7 @@ namespace StopWatch
             this.MinimizeToTray = Properties.Settings.Default.MinimizeToTray;
             this.IssueCount = Properties.Settings.Default.IssueCount;
             this.Username = Properties.Settings.Default.Username;
-            if (Properties.Settings.Default.Password != "")
-                this.Password = DPAPI.Decrypt(Properties.Settings.Default.Password);
-            else
-                this.Password = "";
+            this.PrivateApiToken = Properties.Settings.Default.PrivateApiToken != "" ? DPAPI.Decrypt(Properties.Settings.Default.PrivateApiToken) : "";
             this.FirstRun = Properties.Settings.Default.FirstRun;
             this.SaveTimerState = (SaveTimerSetting)Properties.Settings.Default.SaveTimerState;
             this.PauseOnSessionLock = (PauseAndResumeSetting)Properties.Settings.Default.PauseOnSessionLock;
@@ -137,6 +137,8 @@ namespace StopWatch
             this.StartTransitions = Properties.Settings.Default.StartTransitions;
 
             this.LoggingEnabled = Properties.Settings.Default.LoggingEnabled;
+
+            this.JiraAvatarUrl = Properties.Settings.Default.JiraAvatarUrl;
 
             CheckForUpdate = Properties.Settings.Default.CheckForUpdate;
         }
@@ -154,10 +156,7 @@ namespace StopWatch
                 Properties.Settings.Default.IncludeProjectName = this.IncludeProjectName;
 
                 Properties.Settings.Default.Username = this.Username;
-                if (this.Password != "")
-                    Properties.Settings.Default.Password = DPAPI.Encrypt(this.Password);
-                else
-                    Properties.Settings.Default.Password = "";
+                Properties.Settings.Default.PrivateApiToken = this.PrivateApiToken != "" ? DPAPI.Encrypt(this.PrivateApiToken) : "";
 
                 Properties.Settings.Default.FirstRun = this.FirstRun;
                 Properties.Settings.Default.SaveTimerState = (int)this.SaveTimerState;
@@ -173,6 +172,8 @@ namespace StopWatch
                 Properties.Settings.Default.StartTransitions = this.StartTransitions;
 
                 Properties.Settings.Default.LoggingEnabled = this.LoggingEnabled;
+
+                Properties.Settings.Default.JiraAvatarUrl = this.JiraAvatarUrl;
 
                 Properties.Settings.Default.CheckForUpdate = CheckForUpdate;
 

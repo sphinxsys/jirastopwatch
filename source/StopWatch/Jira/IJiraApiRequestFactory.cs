@@ -27,7 +27,7 @@ namespace StopWatch
         IRestRequest CreateGetIssueTimetrackingRequest(string key);
         IRestRequest CreatePostWorklogRequest(string key, DateTimeOffset started, TimeSpan time, string comment, EstimateUpdateMethods adjustmentMethod, string adjustmentValue);
         IRestRequest CreatePostCommentRequest(string key, string comment);
-        IRestRequest CreateAuthenticateRequest(string username, string password);
+        IRestRequest CreateAuthenticateRequest();
         IRestRequest CreateReAuthenticateRequest();
         IRestRequest CreateGetAvailableTransitions(string key);
         IRestRequest CreateDoTransition(string key, int transitionId);

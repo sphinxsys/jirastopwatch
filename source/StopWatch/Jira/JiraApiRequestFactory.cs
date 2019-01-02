@@ -15,6 +15,7 @@ limitations under the License.
 **************************************************************************/
 using RestSharp;
 using System;
+using RestSharp.Authenticators;
 
 namespace StopWatch
 {
@@ -28,14 +29,12 @@ namespace StopWatch
         public JiraApiRequestFactory(IRestRequestFactory restRequestFactory)
         {
             this.restRequestFactory = restRequestFactory;
-            this.username = "";
-            this.password = "";
         }
 
 
         public IRestRequest CreateValidateSessionRequest()
         {
-            var request = restRequestFactory.Create("/rest/auth/1/session", Method.GET);
+            var request = restRequestFactory.Create("/rest/api/latest/myself", Method.GET);
             return request;
         }
 
@@ -136,26 +135,15 @@ namespace StopWatch
             return request;
         }
 
-        public IRestRequest CreateAuthenticateRequest(string username, string password)
+        public IRestRequest CreateAuthenticateRequest()
         {
-            this.username = username;
-            this.password = password;
-
-            var request = restRequestFactory.Create("/rest/auth/1/session", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddBody(new {
-                username = this.username,
-                password = this.password
-            });
+            var request = restRequestFactory.Create("/rest/api/latest/myself", Method.GET);
             return request;
         }
 
         public IRestRequest CreateReAuthenticateRequest()
         {
-            if (string.IsNullOrEmpty(this.username))
-                throw new AuthenticateNotYetCalledException();
-
-            return CreateAuthenticateRequest(this.username, this.password);
+            return CreateAuthenticateRequest();
         }
         #endregion
 
@@ -163,8 +151,6 @@ namespace StopWatch
         #region private members
         private IRestRequestFactory restRequestFactory;
 
-        private string username;
-        private string password;
         #endregion
     }
 }

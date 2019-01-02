@@ -17,6 +17,7 @@ using RestSharp;
 using StopWatch.Logging;
 using System;
 using System.Net;
+using RestSharp.Authenticators;
 
 namespace StopWatch
 {
@@ -29,10 +30,11 @@ namespace StopWatch
     {
         public string ErrorMessage { get; private set; }
 
-        public JiraApiRequester(IRestClientFactory restClientFactory, IJiraApiRequestFactory jiraApiRequestFactory)
+        public JiraApiRequester(IRestClientFactory restClientFactory, IJiraApiRequestFactory jiraApiRequestFactory, IAuthenticator authenticator)
         {
             this.restClientFactory = restClientFactory;
             this.jiraApiRequestFactory = jiraApiRequestFactory;
+            this.restAuthenticator = authenticator;
             ErrorMessage = "";
         }
 
@@ -43,6 +45,10 @@ namespace StopWatch
             IRestClient client = restClientFactory.Create();
 
             _logger.Log(string.Format("Request: {0}", client.BuildUri(request)));
+
+            if (this.restAuthenticator != null)
+                client.Authenticator = this.restAuthenticator;
+
             IRestResponse<T> response = client.Execute<T>(request);
             _logger.Log(string.Format("Response: {0} - {1}", response.StatusCode, StringHelpers.Truncate(response.Content, 100)));
 
@@ -83,13 +89,17 @@ namespace StopWatch
             }
 
             var client = restClientFactory.Create(true);
+
+            if (this.restAuthenticator != null)
+                client.Authenticator = this.restAuthenticator;
+
             _logger.Log(string.Format("Request: {0}", client.BuildUri(request)));
             IRestResponse response = client.Execute(request);
             _logger.Log(string.Format("Response: {0} - {1}", response.StatusCode, StringHelpers.Truncate(response.Content, 100)));
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                ErrorMessage = "Invalid username or password";
+                ErrorMessage = "Invalid username or api token";
                 return false;
             }
 
@@ -108,5 +118,6 @@ namespace StopWatch
 
         private IRestClientFactory restClientFactory;
         private IJiraApiRequestFactory jiraApiRequestFactory;
+        private IAuthenticator restAuthenticator;
     }
 }

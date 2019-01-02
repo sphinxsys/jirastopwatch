@@ -1,4 +1,6 @@
-﻿namespace StopWatchTest
+﻿using RestSharp.Authenticators;
+
+namespace StopWatchTest
 {
     using Moq;
     using NUnit.Framework;
@@ -32,7 +34,7 @@
 
             jiraApiRequestFactoryMock = new Mock<IJiraApiRequestFactory>();
 
-            jiraApiRequester = new JiraApiRequester(clientFactoryMock.Object, jiraApiRequestFactoryMock.Object);
+            jiraApiRequester = new JiraApiRequester(clientFactoryMock.Object, jiraApiRequestFactoryMock.Object, new HttpBasicAuthenticator(It.IsAny<string>(), It.IsAny<string>()));
         }
 
 

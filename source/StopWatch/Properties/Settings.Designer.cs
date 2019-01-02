@@ -73,18 +73,6 @@ namespace StopWatch.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Password {
-            get {
-                return ((string)(this["Password"]));
-            }
-            set {
-                this["Password"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://myjiraserver.local/")]
         public string JiraBaseUrl {
             get {
@@ -181,7 +169,7 @@ namespace StopWatch.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool UpgradeRequired {
             get {
                 return ((bool)(this["UpgradeRequired"]));
@@ -217,18 +205,6 @@ namespace StopWatch.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CheckForUpdate {
-            get {
-                return ((bool)(this["CheckForUpdate"]));
-            }
-            set {
-                this["CheckForUpdate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IncludeProjectName {
             get {
@@ -236,6 +212,42 @@ namespace StopWatch.Properties {
             }
             set {
                 this["IncludeProjectName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PrivateApiToken {
+            get {
+                return ((string)(this["PrivateApiToken"]));
+            }
+            set {
+                this["PrivateApiToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string JiraAvatarUrl {
+            get {
+                return ((string)(this["JiraAvatarUrl"]));
+            }
+            set {
+                this["JiraAvatarUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CheckForUpdate {
+            get {
+                return ((bool)(this["CheckForUpdate"]));
+            }
+            set {
+                this["CheckForUpdate"] = value;
             }
         }
     }

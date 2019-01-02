@@ -22,6 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RestSharp.Authenticators;
 
 namespace StopWatch
 {
@@ -43,7 +44,7 @@ namespace StopWatch
             restClientFactory = new RestClientFactory();
             restClientFactory.BaseUrl = this.settings.JiraBaseUrl;
 
-            jiraApiRequester = new JiraApiRequester(restClientFactory, jiraApiRequestFactory);
+            jiraApiRequester = new JiraApiRequester(restClientFactory, jiraApiRequestFactory, new HttpBasicAuthenticator(this.settings.Username, this.settings.PrivateApiToken));
 
             jiraClient = new JiraClient(jiraApiRequestFactory, jiraApiRequester);
 
@@ -166,7 +167,7 @@ namespace StopWatch
             else
             {
                 if (IsJiraEnabled)
-                    AuthenticateJira(this.settings.Username, this.settings.Password);
+                    AuthenticateJira(this.settings.Username, this.settings.PrivateApiToken);
             }
 
             InitializeIssueControls();
@@ -254,7 +255,7 @@ namespace StopWatch
 
 
         #region private methods
-        private void AuthenticateJira(string username, string password)
+        private void AuthenticateJira(string username, string privateApiToken)
         {
             Task.Factory.StartNew(
                 () =>
@@ -267,7 +268,7 @@ namespace StopWatch
                         }
                     );
 
-                    if (jiraClient.Authenticate(username, password))
+                    if (jiraClient.Authenticate())
                         this.InvokeIfRequired(
                             () => UpdateIssuesOutput(true)
                         );
@@ -534,9 +535,11 @@ namespace StopWatch
                 if (form.ShowDialog(this) == System.Windows.Forms.DialogResult.OK)
                 {
                     restClientFactory.BaseUrl = this.settings.JiraBaseUrl;
+                    jiraApiRequester = new JiraApiRequester(restClientFactory, jiraApiRequestFactory, new HttpBasicAuthenticator(this.settings.Username, this.settings.PrivateApiToken));
+                    jiraClient = new JiraClient(jiraApiRequestFactory, jiraApiRequester);
                     Logging.Logger.Instance.Enabled = settings.LoggingEnabled;
                     if (IsJiraEnabled)
-                        AuthenticateJira(this.settings.Username, this.settings.Password);
+                        AuthenticateJira(this.settings.Username, this.settings.PrivateApiToken);
                     InitializeIssueControls();
                 }
             }
@@ -691,7 +694,7 @@ namespace StopWatch
                 return !(
                     string.IsNullOrWhiteSpace(settings.JiraBaseUrl) ||
                     string.IsNullOrWhiteSpace(settings.Username) ||
-                    string.IsNullOrWhiteSpace(settings.Password)
+                    string.IsNullOrWhiteSpace(settings.PrivateApiToken)
                 );
             }
         }
